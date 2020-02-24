@@ -1,0 +1,26 @@
+{% load static %}
+<!--Header  -->
+<head>
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="description" content="Gotion Cloud Platform">
+    <meta name="author" content="Gotion Fremont">
+    <meta name="keyword" content="Gotion">
+    <title>Gotion RDB Dashboard</title>
+
+    <!-- Icons -->
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
+
+    <!-- Main styles for this application-->
+    <link href="{% static 'dist/css/v3folder/style.css' %}" rel="stylesheet">
+
+    <!-- Style Sheet Vendors -->
+      <!-- <link href="{% static 'dist/vendors/css/font-awesome.min.css' %}" rel="stylesheet"> -->
+      <!-- <link href="{% static 'dist/vendors/css/simple-line-icons.min.css' %}" rel="stylesheet"> -->
+    <link href="{% static 'dist/vendors/@coreui/chartjs/css/coreui-chartjs.css' %}" rel="stylesheet">
+
+    {% block extrahead %}
+    {% endblock %}
+</head>

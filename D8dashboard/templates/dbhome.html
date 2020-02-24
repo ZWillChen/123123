@@ -1,0 +1,116 @@
+
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+
+	<h3>Example layout of using template to fetch some records from database</h3>
+	<hr>
+
+	<!-- Show something from Gotion RDB -->
+	<div class="card">
+        <div class="card-header">Members
+        </div>
+        <div class="card-body">
+        	<table class="table table-responsive-sm">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Title</th>
+                    <th>Location</th>
+                    <th>Telephone</th>
+                  </tr>
+                </thead>
+                <tbody>
+		        	{% for member in members %}
+	                    <tr>
+		                    <td>{{member.name}}</td>
+		                    <td>{{member.title}}</td>
+		                    <td>{{member.dept_field}}</td>
+		                    <td>{{member.telephone_field}}</td>
+	                    </tr>
+		        	{% endfor%}
+                </tbody>
+            </table>
+        <ul class="pagination">
+            <li class="page-item"><a class="page-link" href="#">Prev</a></li>
+            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"><a class="page-link" href="#">4</a></li>
+            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+        </ul>
+        </div>
+	</div>
+
+
+	<!-- Charts -->
+	  <div class="card-columns cols-2">
+	    <div class="card">
+	      <div class="card-header">Line Chart
+	        <div class="card-header-actions"><a class="card-header-action" href="http://www.chartjs.org" target="_blank"><small class="text-muted">docs</small></a></div>
+	      </div>
+	      <div class="card-body">
+	        <div class="c-chart-wrapper">
+	          <canvas id="canvas-1"></canvas>
+	        </div>
+	      </div>
+	    </div>
+	    <div class="card">
+	      <div class="card-header">Bar Chart
+	        <div class="card-header-actions"><a class="card-header-action" href="http://www.chartjs.org" target="_blank"><small class="text-muted">docs</small></a></div>
+	      </div>
+	      <div class="card-body">
+	        <div class="c-chart-wrapper">
+	          <canvas id="canvas-2"></canvas>
+	        </div>
+	      </div>
+	    </div>
+	    <div class="card">
+	      <div class="card-header">Doughnut Chart
+	        <div class="card-header-actions"><a class="card-header-action" href="http://www.chartjs.org" target="_blank"><small class="text-muted">docs</small></a></div>
+	      </div>
+	      <div class="card-body">
+	        <div class="c-chart-wrapper">
+	          <canvas id="canvas-3"></canvas>
+	        </div>
+	      </div>
+	    </div>
+	    <div class="card">
+	      <div class="card-header">Radar Chart
+	        <div class="card-header-actions"><a class="card-header-action" href="http://www.chartjs.org" target="_blank"><small class="text-muted">docs</small></a></div>
+	      </div>
+	      <div class="card-body">
+	        <div class="c-chart-wrapper">
+	          <canvas id="canvas-4"></canvas>
+	        </div>
+	      </div>
+	    </div>
+	    <div class="card">
+	      <div class="card-header">Pie Chart
+	        <div class="card-header-actions"><a class="card-header-action" href="http://www.chartjs.org" target="_blank"><small class="text-muted">docs</small></a></div>
+	      </div>
+	      <div class="card-body">
+	        <div class="c-chart-wrapper">
+	          <canvas id="canvas-5"></canvas>
+	        </div>
+	      </div>
+	    </div>
+	    <div class="card">
+	      <div class="card-header">Polar Area Chart
+	        <div class="card-header-actions"><a class="card-header-action" href="http://www.chartjs.org" target="_blank"><small class="text-muted">docs</small></a></div>
+	      </div>
+	      <div class="card-body">
+	        <div class="c-chart-wrapper">
+	          <canvas id="canvas-6"></canvas>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+
+
+    <!-- Plugins and scripts required by this view-->
+    <script src="{% static 'dist/vendors/@coreui/chartjs/js/coreui-chartjs.bundle.js' %}"></script>
+    <script src="{% static 'dist/vendors/@coreui/utils/js/coreui-utils.js' %}"></script>
+    <script src="{% static 'dist/js/charts.js' %}"></script>
+
+{% endblock %}
