@@ -3,10 +3,10 @@
 
 {% block content %}
 
-	<div class="container" style="width:100%">
+	<div class="" style="width:100%">
 	  	<div class="row">
 	    	<div class="col-md-12 d-flex justify-content-center">
-	      		<div class="card" style="width:80%">
+	      		<div class="card" style="width:100%">
 			        <div class="card-header d-flex justify-content-between">
 			        	<div class="text-left">
 			        		<strong>DB Search</strong>
@@ -18,35 +18,31 @@
 			        <div class="card-body">
 			          <form id="search_form" class="form-horizontal" action="{% url 'result' %}" method="post" enctype="multipart/form-data">
 			          	{% csrf_token %}
-			            <div class="form-group row">
-			              <label class="col-md-3 col-form-label" for="text-input">Key Word</label>
-			              <div class="col-md-9">
+			            <div class="d-flex form-group row justify-content-center">
+
+			              <label class="col-md-1 col-form-label" for="text-input">Key Word</label>
+			              <div class="col-md-2">
 			                <input class="form-control" id="keyword-input" type="text" name="keyword-input" placeholder="Type Key Word for Issue Search"><span class="help-block" hidden>This is a help text</span>
 			              </div>
-			            </div>
 
-			            <div class="form-group row">
-			              <label class="col-md-3 col-form-label" for="text-input">Name</label>
-			              <div class="col-md-9">
+  			              <label class="col-md-1 col-form-label" for="text-input">Name</label>
+			              <div class="col-md-2">
 			                <input class="form-control" id="name-input" type="text" name="name-input" placeholder="Type a Name for Issue Search"><span class="help-block" hidden>This is a help text</span>
 			              </div>
-			            </div>
 
-			            <div class="form-group row">
-			              <label class="col-md-3 col-form-label" for="date-input">Start Date</label>
-			              <div class="col-md-9">
+  			              <label class="col-md-1 col-form-label" for="date-input">Start Date</label>
+			              <div class="col-md-2">
 			                <input class="form-control" id="start_date-input" type="date" name="start_date-input" placeholder="date">
 			                <span class="help-block" id="sdate_err" style="color:#FF0000" hidden>Please enter a valid start date!</span>
 			              </div>
-			            </div>
 
-			            <div class="form-group row">
-			              <label class="col-md-3 col-form-label" for="date-input">End Date</label>
-			              <div class="col-md-9">
+  			              <label class="col-md-1 col-form-label" for="date-input">End Date</label>
+			              <div class="col-md-2">
 			                <input class="form-control" id="end_date-input" type="date" name="end_date-input" placeholder="date">
 			                <span class="help-block" id="edate_err" style="color:#FF0000" hidden>Please enter a valid end date!</span>
 			              </div>
 			            </div>
+
 						</form>
 			        </div>
 
@@ -62,38 +58,6 @@
 		</div>
 	</div>
 
-<script type="text/javascript">
-	function GoClick(){
-		if(validationCheck()){
-			var help = document.getElementsByClassName("help-block");
-			for (var i = 0, len = help.length | 0; i < len; i=i+1 | 0){
-				help[i].hidden = true;
-			}
-			document.getElementById("search_form").submit();
-		}
-		else{
-			alert("Please check your input!");
-		}
-	}
-	function validationCheck(){
-		var sdate = document.getElementById("start_date-input").value.toString();
-		var edate = document.getElementById("end_date-input").value.toString();
-		var isValid = true;
-		var hasInput = true;
-		if(typeof(sdate) == "null" || sdate.length == 0){
-			document.getElementById("sdate_err").hidden = false;
-			hasInput = false;
-		}
-		if(typeof(edate) == "null" || edate.length == 0){
-			document.getElementById("edate_err").hidden = false;
-			hasInput = false;
-		}
-		if(hasInput){
-			isValid = ((new Date(edate.replace(/-/g,"\/"))) > (new Date(sdate.replace(/-/g,"\/"))));
-			document.getElementById("sdate_err").hidden = false;
-			document.getElementById("sdate_err").innerHTML += " Start date must be earlier than end date!";
-		}
-		return hasInput ? isValid : false;
-	}
-</script>>
+<script src="{% static 'src/js/search.js' %}"></script>
+
 {% endblock %}

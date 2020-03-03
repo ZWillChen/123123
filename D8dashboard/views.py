@@ -19,6 +19,13 @@ def search(request):
 	return render(request, 'search.html', {})
 
 def result(request):
+	# Preserve input args for next search
+	lastkeyword = request.POST.get('keyword-input')
+	lastname    = request.POST.get('name-input')
+	laststart   = request.POST.get('start_date-input')
+	lastend     = request.POST.get('end_date-input')
+
+	# Store results in results list
 	results = []
 	start_date = request.POST.get('start_date-input').split('-')
 	end_date = request.POST.get('end_date-input').split('-')
@@ -34,7 +41,8 @@ def result(request):
 		datetime.date(end_year, end_month, end_day))) 
 	if isinstance(res, tuple):
 		emptyMsg = "No result to display"
-		return render(request, 'search_result.html', {'emptyMsg' : emptyMsg})
+		return render(request, 'search_result.html', {'emptyMsg' : emptyMsg, 'lastkeyword' : lastkeyword, 'lastname' : lastname,
+		'laststart' : laststart, 'lastend' : lastend})
 	for row in res.itertuples():
 		inner = []
 		for c in res.columns[1:-1]:
@@ -42,7 +50,8 @@ def result(request):
 				inner.append(value)
 		results.append(inner)
 
-	return render(request, 'search_result.html', {'results' : results})
+	return render(request, 'search_result.html', {'results' : results, 'lastkeyword' : lastkeyword, 'lastname' : lastname,
+		'laststart' : laststart, 'lastend' : lastend})
 
 def database_dashboard(request):
 	members = Members.objects.all()
