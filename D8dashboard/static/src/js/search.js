@@ -31,3 +31,9 @@ function validationCheck(){
 	}
 	return isValid;
 }
+function Reset(){
+	document.getElementById("start_date-input").value = "";
+	document.getElementById("end_date-input").value = "";
+	document.getElementById("keyword-input").value = "";
+	document.getElementById("name-input").value = "";
+}
