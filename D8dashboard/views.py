@@ -37,7 +37,7 @@ def result(request):
 	end_day = int(end_date[2])
 	keyword = request.POST.get('keyword-input')
 	name = request.POST.get('name-input')
-	res = g_instance.runProcedure('QueryIssue', (keyword, name, datetime.date(start_year, start_month, start_day), \
+	res = g_instance.runProcedure('QueryIssue', (name, keyword, datetime.date(start_year, start_month, start_day), \
 		datetime.date(end_year, end_month, end_day))) 
 	if isinstance(res, tuple):
 		emptyMsg = "No result to display"

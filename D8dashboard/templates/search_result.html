@@ -21,23 +21,23 @@
 			          	{% csrf_token %}
 			            <div class="d-flex form-group row justify-content-center">
 
-			              <label class="col-md-1 col-form-label" for="text-input">Key Word</label>
+			              <label class="col-md-1 col-form-label text-right" for="text-input">Key Word</label>
 			              <div class="col-md-2">
 			                <input class="form-control" id="keyword-input" type="text" name="keyword-input" placeholder="Type Key Word for Issue Search"><span class="help-block" hidden>This is a help text</span>
 			              </div>
 
-  			              <label class="col-md-1 col-form-label" for="text-input">Name</label>
+  			              <label class="col-md-1 col-form-label text-right" for="text-input">Name</label>
 			              <div class="col-md-2">
 			                <input class="form-control" id="name-input" type="text" name="name-input" placeholder="Type a Name for Issue Search"><span class="help-block" hidden>This is a help text</span>
 			              </div>
 
-  			              <label class="col-md-1 col-form-label" for="date-input">Start Date</label>
+  			              <label class="col-md-1 col-form-label text-right" for="date-input">Start Date</label>
 			              <div class="col-md-2">
 			                <input class="form-control" id="start_date-input" type="date" name="start_date-input" placeholder="date">
 			                <span class="help-block" id="sdate_err" style="color:#FF0000" hidden>Please enter a valid start date!</span>
 			              </div>
 
-  			              <label class="col-md-1 col-form-label" for="date-input">End Date</label>
+  			              <label class="col-md-1 col-form-label text-right" for="date-input">End Date</label>
 			              <div class="col-md-2">
 			                <input class="form-control" id="end_date-input" type="date" name="end_date-input" placeholder="date">
 			                <span class="help-block" id="edate_err" style="color:#FF0000" hidden>Please enter a valid end date!</span>
@@ -91,7 +91,7 @@
                   {% endfor%}
                 </tbody>
               </table>
-              <div class="text-center">
+              <div class="text-right">
                 <i>{{ emptyMsg }}</i>
               </div>
             </div>
