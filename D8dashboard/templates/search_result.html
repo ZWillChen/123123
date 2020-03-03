@@ -1,4 +1,4 @@
-{% extends 'base/base.html' %}
+{% extends 'base/base_clean.html' %}
 {% load static %}
 
 {% block content %}
@@ -36,8 +36,13 @@
                   {% endfor%}
                 </tbody>
               </table>
-
+              <div class="text-center">
+                <i>{{ emptyMsg }}</i>
+              </div>
             </div>
+	        <div class="d-flex justify-content-end card-footer">
+	          <a href="{% url 'search' %}" class="btn btn-info" type="button" style="min-width: 120px"> Back </a>
+	        </div>
           </div>
         </div>
         <!-- End of row -->

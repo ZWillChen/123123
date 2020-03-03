@@ -2,64 +2,65 @@
 {% load static %}
 
 {% block content %}
-<div class="container">
-  	<div class="row">
-    	<div class="col-md-12">
-      		<div class="card">
-		        <div class="card-header d-flex justify-content-between">
-		        	<div class="text-left">
-		        		<strong>DB Search</strong>
-		        	</div>
-		        	<div class="text-right">
-		       			<!-- Option text or links -->
-		        	</div>
-		        </div>
-		        <div class="card-body">
-		          <form id="search_form" class="form-horizontal" action="{% url 'result' %}" method="post" enctype="multipart/form-data">
-		          	{% csrf_token %}
-		            <div class="form-group row">
-		              <label class="col-md-3 col-form-label" for="text-input">Key Word</label>
-		              <div class="col-md-9">
-		                <input class="form-control" id="keyword-input" type="text" name="keyword-input" placeholder="Type Key Word for Issue Search"><span class="help-block" hidden>This is a help text</span>
-		              </div>
-		            </div>
 
-		            <div class="form-group row">
-		              <label class="col-md-3 col-form-label" for="text-input">Name</label>
-		              <div class="col-md-9">
-		                <input class="form-control" id="name-input" type="text" name="name-input" placeholder="Type a Name for Issue Search"><span class="help-block" hidden>This is a help text</span>
-		              </div>
-		            </div>
+	<div class="container" style="width:100%">
+	  	<div class="row">
+	    	<div class="col-md-12 d-flex justify-content-center">
+	      		<div class="card" style="width:80%">
+			        <div class="card-header d-flex justify-content-between">
+			        	<div class="text-left">
+			        		<strong>DB Search</strong>
+			        	</div>
+			        	<div class="text-right">
+			       			<!-- Option text or links -->
+			        	</div>
+			        </div>
+			        <div class="card-body">
+			          <form id="search_form" class="form-horizontal" action="{% url 'result' %}" method="post" enctype="multipart/form-data">
+			          	{% csrf_token %}
+			            <div class="form-group row">
+			              <label class="col-md-3 col-form-label" for="text-input">Key Word</label>
+			              <div class="col-md-9">
+			                <input class="form-control" id="keyword-input" type="text" name="keyword-input" placeholder="Type Key Word for Issue Search"><span class="help-block" hidden>This is a help text</span>
+			              </div>
+			            </div>
 
-		            <div class="form-group row">
-		              <label class="col-md-3 col-form-label" for="date-input">Start Date</label>
-		              <div class="col-md-9">
-		                <input class="form-control" id="start_date-input" type="date" name="start_date-input" placeholder="date">
-		                <span class="help-block" id="sdate_err" style="color:#FF0000" hidden>Please enter a valid start date!</span>
-		              </div>
-		            </div>
+			            <div class="form-group row">
+			              <label class="col-md-3 col-form-label" for="text-input">Name</label>
+			              <div class="col-md-9">
+			                <input class="form-control" id="name-input" type="text" name="name-input" placeholder="Type a Name for Issue Search"><span class="help-block" hidden>This is a help text</span>
+			              </div>
+			            </div>
 
-		            <div class="form-group row">
-		              <label class="col-md-3 col-form-label" for="date-input">End Date</label>
-		              <div class="col-md-9">
-		                <input class="form-control" id="end_date-input" type="date" name="end_date-input" placeholder="date">
-		                <span class="help-block" id="edate_err" style="color:#FF0000" hidden>Please enter a valid end date!</span>
-		              </div>
-		            </div>
-					</form>
-		        </div>
+			            <div class="form-group row">
+			              <label class="col-md-3 col-form-label" for="date-input">Start Date</label>
+			              <div class="col-md-9">
+			                <input class="form-control" id="start_date-input" type="date" name="start_date-input" placeholder="date">
+			                <span class="help-block" id="sdate_err" style="color:#FF0000" hidden>Please enter a valid start date!</span>
+			              </div>
+			            </div>
 
-				<!-- Card footer: Buttons -->
-		        <div class="d-flex justify-content-end card-footer">
-		          <button class="btn btn-dark" type="reset" style="min-width: 120px"> Reset</button>
-		          <div style="min-width: 20px"></div>
-		          <button class="btn btn-info" type="submit" style="min-width: 120px" onclick="GoClick()"> Go! </button>
-		        </div>
+			            <div class="form-group row">
+			              <label class="col-md-3 col-form-label" for="date-input">End Date</label>
+			              <div class="col-md-9">
+			                <input class="form-control" id="end_date-input" type="date" name="end_date-input" placeholder="date">
+			                <span class="help-block" id="edate_err" style="color:#FF0000" hidden>Please enter a valid end date!</span>
+			              </div>
+			            </div>
+						</form>
+			        </div>
 
-      		</div>
+					<!-- Card footer: Buttons -->
+			        <div class="d-flex justify-content-end card-footer">
+			          <button class="btn btn-dark" type="reset" style="min-width: 120px"> Reset</button>
+			          <div style="min-width: 20px"></div>
+			          <button class="btn btn-info" type="submit" style="min-width: 120px" onclick="GoClick()"> Go! </button>
+			        </div>
+
+	      		</div>
+			</div>
 		</div>
 	</div>
-</div>
 
 <script type="text/javascript">
 	function GoClick(){

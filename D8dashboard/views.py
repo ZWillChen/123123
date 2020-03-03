@@ -32,7 +32,9 @@ def result(request):
 	name = request.POST.get('name-input')
 	res = g_instance.runProcedure('QueryIssue', (keyword, name, datetime.date(start_year, start_month, start_day), \
 		datetime.date(end_year, end_month, end_day))) 
-	
+	if isinstance(res, tuple):
+		emptyMsg = "No result to display"
+		return render(request, 'search_result.html', {'emptyMsg' : emptyMsg})
 	for row in res.itertuples():
 		inner = []
 		for c in res.columns[1:-1]:
