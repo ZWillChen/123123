@@ -1,0 +1,47 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+
+  	<div class="row">
+  		<div class="col-lg-12">
+  		  <!-- TABLE -->
+          <div class="card">
+            <div class="card-header"><strong>Search Result</strong></div>
+            <div class="card-body">
+              <table class="table table-responsive-sm table-striped text-left">
+                <thead>
+                  <tr>
+                    <th style="width: 100px">Customer</th>
+                    <th>Identification</th>
+                    <th>Description</th>
+                    <th>Project</th>
+                    <th>Supplier</th>
+                    <th style="width: 120px">Part Number</th>
+                    <th style="width: 120px">RON Number</th>
+                    <th>Cost</th>
+                    <th>Owner</th>
+                    <th style="width: 100px">Open Date</th>
+                    <th style="width: 100px">Due Date</th>
+                    <th style="width: 110px">Closed Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+               	  {% for inner in results %}
+	                  <tr>
+	                  	{% for item in inner %}
+	                    	<td> {{ item }} </td>
+	                    {% endfor%}	
+	                  </tr>
+                  {% endfor%}
+                </tbody>
+              </table>
+
+            </div>
+          </div>
+        </div>
+        <!-- End of row -->
+	</div> 
+
+
+{% endblock %}

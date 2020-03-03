@@ -1,0 +1,6 @@
+*.pyc
+*.det
+/build
+/dist
+.idea/
+/.ipynb_checkpoints/

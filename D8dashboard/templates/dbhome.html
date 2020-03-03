@@ -42,70 +42,46 @@
         </div>
 	</div>
 
-
-	<!-- Charts -->
-	  <div class="card-columns cols-2">
-	    <div class="card">
-	      <div class="card-header">Line Chart
-	        <div class="card-header-actions"><a class="card-header-action" href="http://www.chartjs.org" target="_blank"><small class="text-muted">docs</small></a></div>
-	      </div>
-	      <div class="card-body">
-	        <div class="c-chart-wrapper">
-	          <canvas id="canvas-1"></canvas>
-	        </div>
-	      </div>
-	    </div>
-	    <div class="card">
-	      <div class="card-header">Bar Chart
-	        <div class="card-header-actions"><a class="card-header-action" href="http://www.chartjs.org" target="_blank"><small class="text-muted">docs</small></a></div>
-	      </div>
-	      <div class="card-body">
-	        <div class="c-chart-wrapper">
-	          <canvas id="canvas-2"></canvas>
-	        </div>
-	      </div>
-	    </div>
-	    <div class="card">
-	      <div class="card-header">Doughnut Chart
-	        <div class="card-header-actions"><a class="card-header-action" href="http://www.chartjs.org" target="_blank"><small class="text-muted">docs</small></a></div>
-	      </div>
-	      <div class="card-body">
-	        <div class="c-chart-wrapper">
-	          <canvas id="canvas-3"></canvas>
-	        </div>
-	      </div>
-	    </div>
-	    <div class="card">
-	      <div class="card-header">Radar Chart
-	        <div class="card-header-actions"><a class="card-header-action" href="http://www.chartjs.org" target="_blank"><small class="text-muted">docs</small></a></div>
-	      </div>
-	      <div class="card-body">
-	        <div class="c-chart-wrapper">
-	          <canvas id="canvas-4"></canvas>
-	        </div>
-	      </div>
-	    </div>
-	    <div class="card">
-	      <div class="card-header">Pie Chart
-	        <div class="card-header-actions"><a class="card-header-action" href="http://www.chartjs.org" target="_blank"><small class="text-muted">docs</small></a></div>
-	      </div>
-	      <div class="card-body">
-	        <div class="c-chart-wrapper">
-	          <canvas id="canvas-5"></canvas>
-	        </div>
-	      </div>
-	    </div>
-	    <div class="card">
-	      <div class="card-header">Polar Area Chart
-	        <div class="card-header-actions"><a class="card-header-action" href="http://www.chartjs.org" target="_blank"><small class="text-muted">docs</small></a></div>
-	      </div>
-	      <div class="card-body">
-	        <div class="c-chart-wrapper">
-	          <canvas id="canvas-6"></canvas>
-	        </div>
-	      </div>
-	    </div>
-	  </div>
+	<div class="card">
+        <div class="card-header">Issues
+        </div>
+        <div class="card-body">
+        	<table class="table table-responsive-sm">
+                <thead>
+                  <tr>
+                    <th>Issue ID</th>
+                    <th>Customer</th>
+                    <th>Identify</th>
+                    <th>Description</th>
+                    <th>Open Date</th>
+                    <th>Closed Date</th>
+                    <th>Due Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+		        	{% for issue in issues %}
+	                    <tr>
+		                    <td style="min-width: 100px">{{issue.id}}</td>
+		                    <td>{{issue.customer}}</td>
+		                    <td>{{issue.identify}}</td>
+		                    <td>{{issue.description}}</td>
+		                    <td style="min-width: 100px">{{issue.open_date}}</td>
+		                    <td style="min-width: 110px">{{issue.closed_date}}</td>
+		                    <td style="min-width: 100px">{{issue.due_date}}</td>
+	                    </tr>
+		        	{% endfor%}
+                </tbody>
+            </table>
+        <ul class="pagination">
+            <li class="page-item"><a class="page-link" href="#">Prev</a></li>
+            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"><a class="page-link" href="#">4</a></li>
+            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+        </ul>
+        </div>
+	</div>
 
 
     <!-- Plugins and scripts required by this view-->

@@ -5,11 +5,16 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
+	# Homepage 
     url(r'^$', views.index, name='home'),
+    # File Operation
     url(r'^upload$', views.file_upload, name='file_upload'),
     url(r'^download$', views.file_download, name='file_download'),
-    url(r'^another$', views.another_world, name='another_world'),
+    # Dashboard
     url(r'^dbdashboard$', views.database_dashboard, name='database_dashboard'),
+    # Search and Result
+    url(r'^search$', views.search, name='search'),	
+    url(r'^search/result$', views.result, name='result'),
 ]
 
 

@@ -207,9 +207,9 @@ class DjangoSession(models.Model):
         managed = False
         db_table = 'django_session'
 
-# id field must have be a pk
+
 class TableName(models.Model):
-    id = models.BigIntegerField(db_column='ID', primary_key=True)  # Field name made lowercase.
+    id = models.BigIntegerField(db_column='ID', blank=True, null=True)  # Field name made lowercase.
     customer = models.TextField(db_column='Customer', blank=True, null=True)  # Field name made lowercase.
     project = models.TextField(db_column='Project', blank=True, null=True)  # Field name made lowercase.
     supplier = models.TextField(db_column='Supplier', blank=True, null=True)  # Field name made lowercase.
