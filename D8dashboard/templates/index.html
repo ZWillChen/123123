@@ -4,6 +4,57 @@
   <div>
     <div class="column">  
       <!-- Start of Container -->
+      <div class="row">
+        <div class="col-md-12 d-flex justify-content-center">
+            <div class="card" style="width:100%">
+              <div class="card-header d-flex justify-content-between">
+                <div class="text-left">
+                  <strong>DB Search</strong>
+                </div>
+                <div class="text-right">
+                  <!-- Option text or links -->
+                </div>
+              </div>
+              <div class="card-body">
+                <form id="search_form" class="form-horizontal" action="{% url 'result' %}" method="post" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  <div class="d-flex form-group row justify-content-left">
+                    <div class="d-flex" style="width:80%">
+                    <label class="col-md-1 col-form-label text-right" for="text-input">Key Word</label>
+                    <div class="col-md-2">
+                      <input class="form-control" id="keyword-input" type="text" name="keyword-input" placeholder="Key Word for Issue"><span class="help-block" hidden>This is a help text</span>
+                    </div>
+
+                      <label class="col-md-1 col-form-label text-right" for="text-input">Member</label>
+                    <div class="col-md-2">
+                      <input class="form-control" id="name-input" type="text" name="name-input" placeholder="Type a Member Name"><span class="help-block" hidden>This is a help text</span>
+                    </div>
+
+                      <label class="col-md-1 col-form-label text-right" for="date-input">Start Date</label>
+                    <div class="col-md-2">
+                      <input class="form-control" id="start_date-input" type="date" name="start_date-input" placeholder="date">
+                      <span class="help-block" id="sdate_err" style="color:#FF0000" hidden>Please enter a valid start date!</span>
+                    </div>
+
+                      <label class="col-md-1 col-form-label text-right" for="date-input">End Date</label>
+                    <div class="col-md-2">
+                      <input class="form-control" id="end_date-input" type="date" name="end_date-input" placeholder="date">
+                      <span class="help-block" id="edate_err" style="color:#FF0000" hidden>Please enter a valid end date!</span>
+                    </div>
+                    </div>
+
+                    <div class="d-flex justify-content-center" style="width:20%">
+                      <button class="btn btn-info" type="submit" style="min-width: 100px" onclick="GoClick()"> Go! </button>
+                      <div style="min-width: 20px"></div>
+                      <button class="btn btn-dark" type="reset" style="min-width: 100px" onclick="Reset()"> Reset</button>
+                    </div>
+                  </div>
+
+            </form>
+              </div>
+            </div>
+      </div>
+    </div>      
       <!-- <h1>Welcome</h1> -->
       <div class="card-columns cols-2">
         <!--  Widget-->
@@ -75,5 +126,5 @@
   <script src="{% static 'dist/vendors/@coreui/chartjs/js/coreui-chartjs.bundle.js' %}"></script>
   <script src="{% static 'dist/vendors/@coreui/utils/js/coreui-utils.js' %}"></script>
   <script src="{% static 'dist/js/main.js' %}"></script>
-
+  <script src="{% static 'src/js/search.js' %}"></script>
 {% endblock %}
