@@ -43,11 +43,10 @@ def result(request):
 		emptyMsg = "No result to display"
 		return render(request, 'search_result.html', {'emptyMsg' : emptyMsg, 'lastkeyword' : lastkeyword, 'lastname' : lastname,
 		'laststart' : laststart, 'lastend' : lastend})
-	for row in res.itertuples():
+	for i in range(len(res)):
 		inner = []
-		for c in res.columns[1:-1]:
-			for value in res[c].values:
-				inner.append(value)
+		for j in range(1, len(res.columns[1:-1]) + 1):
+			inner.append(res.iat[i, j])
 		results.append(inner)
 
 	return render(request, 'search_result.html', {'results' : results, 'lastkeyword' : lastkeyword, 'lastname' : lastname,
