@@ -11,7 +11,13 @@ g_instance = GotionMySql(host_path='gordb.crjj5hgcxroo.us-east-1.rds.amazonaws.c
 g_instance.connect()
 
 # Multiple Queries
-QueryIssue = g_instance.runProcedure('QueryIssue', ('', '', datetime.date(2019, 4, 13), datetime.date(2020, 2, 13)))  # argument needs to be tuple, % for wildcard, if leave empty, it is all wildcard
+# QueryIssue = g_instance.runProcedure('QueryIssue', ('', '', datetime.date(2019, 4, 13), datetime.date(2020, 2, 13))) # argument needs to be tuple, % for wildcard, if leave empty, it is all wildcard
+# QueryActivate = g_instance.runProcedure('QueryIssueStatus', ('', '', datetime.date(1970, 1, 1), datetime.date(2100, 1, 1)))
+#
+# print(QueryActivate.columns)
+# print(QueryActivate.iat[len(QueryActivate) - 1, 0])
+# print(QueryActivate.iat[len(QueryActivate) - 1, 1])
+# print(QueryActivate.iat[len(QueryActivate) - 1, 2])
 
 # results = []
 #

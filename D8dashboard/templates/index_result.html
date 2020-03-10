@@ -113,10 +113,10 @@
 
         <!-- Pie Chart -->
         <div class="card" style="min-height: "> 
-            <div class="card-header">Projects Percentage</div>
+            <div class="card-header">Projects Status: (lastupdated {{lastdate}})</div>
             <div class="card-body">
               <div class="c-chart-wrapper">
-                <canvas id="main-piechart"></canvas>
+                <canvas id="result-piechart"></canvas>
               </div>
             </div>
           </div>
@@ -130,6 +130,36 @@
   <!-- Plugins and scripts required by this view-->
   <script src="{% static 'dist/vendors/@coreui/chartjs/js/coreui-chartjs.bundle.js' %}"></script>
   <script src="{% static 'dist/vendors/@coreui/utils/js/coreui-utils.js' %}"></script>
-  <script src="{% static 'dist/js/main.js' %}"></script>
   <script src="{% static 'src/js/search.js' %}"></script>
+  <script src="{% static 'dist/js/index_result.js' %}"></script>
+  <script type="text/javascript">
+    //reinput last search for users
+	var lastkeyword = "{{ lastkeyword }}" == null ? "" : "{{ lastkeyword }}";
+	var lastname = "{{ lastname }}" == null ? "" : "{{ lastname }}";
+	var laststart = "{{ laststart }}" == "1970-01-01" ? "" : "{{ laststart }}";
+	var lastend = "{{ lastend }}" == "2100-01-01" ? "" : "{{ lastend }}";
+	document.getElementById("keyword-input").value = lastkeyword;
+	document.getElementById("name-input").value 		 = lastname;
+	document.getElementById("start_date-input").value    = laststart;
+	document.getElementById("end_date-input").value      = lastend;
+
+    //draw pie chart according to query
+    var data = {{pieres|safe}};
+    var pieChart = new Chart(document.getElementById('result-piechart'), {
+      type: 'pie',
+      data: {
+        labels: ['Open','Closed'],
+        datasets: [{
+          data: [data[0], data[1]],
+          backgroundColor: ['#FF6384', '#36A2EB'],
+          hoverBackgroundColor: ['#FF6384', '#36A2EB']
+        }]
+      },
+      options: {
+        responsive: true
+      }
+    });
+
+    //draw line chart according to query
+  </script>
 {% endblock %}

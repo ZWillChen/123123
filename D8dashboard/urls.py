@@ -15,6 +15,7 @@ urlpatterns = [
     # Search and Result
     url(r'^search$', views.search, name='search'),	
     url(r'^search/result$', views.result, name='result'),
+    url(r'^index$', views.index_result, name='index_result'),
 ]
 
 

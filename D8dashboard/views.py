@@ -4,19 +4,49 @@ from .models import Members
 from .models import Issue
 from .GotionBattery.TestSQL import g_instance
 import datetime
+import json
 # Create your views here. #
 
+
 def index(request):
-    return render(request, 'index.html', {})
+	return render(request, 'index.html', {})
+
+
+def index_result(request):
+	# Preserve input args for next search
+	lastkeyword = request.POST.get('keyword-input')
+	lastname    = request.POST.get('name-input')
+	laststart   = request.POST.get('start_date-input')
+	lastend     = request.POST.get('end_date-input')
+
+	# Receive submit from form
+	start_date = request.POST.get('start_date-input').split('-')
+	end_date = request.POST.get('end_date-input').split('-')
+	keyword = request.POST.get('keyword-input')
+	name = request.POST.get('name-input')
+
+	# Query
+	pieres = getActive(start_date, end_date, keyword, name)
+	return render(request, 'index_result.html', {'pieres': list(pieres),
+												 'lastdate': pieres[2],
+												 'lastkeyword': lastkeyword,
+												 'lastname': lastname,
+												 'laststart': laststart,
+												 'lastend': lastend,
+												 })
+
 
 def file_upload(request):
 	return render(request, 'upload.html', {})
 
+
 def file_download(request):
 	return render(request, 'download.html', {})
 
+
 def search(request):	
 	return render(request, 'search.html', {})
+
 
 def result(request):
 	# Preserve input args for next search
@@ -37,23 +67,54 @@ def result(request):
 	end_day = int(end_date[2])
 	keyword = request.POST.get('keyword-input')
 	name = request.POST.get('name-input')
-	res = g_instance.runProcedure('QueryIssue', (name, keyword, datetime.date(start_year, start_month, start_day), \
-		datetime.date(end_year, end_month, end_day))) 
+	res = g_instance.runProcedure('QueryIssue', (name, keyword, datetime.date(start_year, start_month, start_day),
+		datetime.date(end_year, end_month, end_day)))
 	if isinstance(res, tuple):
 		emptyMsg = "No result to display"
-		return render(request, 'search_result.html', {'emptyMsg' : emptyMsg, 'lastkeyword' : lastkeyword, 'lastname' : lastname,
-		'laststart' : laststart, 'lastend' : lastend})
+		return render(request, 'search_result.html', {'emptyMsg' : emptyMsg,
+													  'lastkeyword' : lastkeyword,
+													  'lastname' : lastname,
+													  'laststart' : laststart,
+													  'lastend' : lastend,
+													  })
 	for i in range(len(res)):
 		inner = []
 		for j in range(1, len(res.columns[1:-1]) + 1):
 			inner.append(res.iat[i, j])
 		results.append(inner)
 
-	return render(request, 'search_result.html', {'results' : results, 'lastkeyword' : lastkeyword, 'lastname' : lastname,
-		'laststart' : laststart, 'lastend' : lastend})
+	return render(request, 'search_result.html', {'results' : results,
+												  'lastkeyword' : lastkeyword,
+												  'lastname' : lastname,
+												  'laststart' : laststart,
+												  'lastend' : lastend,
+												  })
+
 
 def database_dashboard(request):
 	members = Members.objects.all()
 	issues = Issue.objects.all()
-	return render(request, 'dbhome.html', {'members' : members, 'issues' : issues})
+	return render(request, 'dbhome.html', {'members' : members,
+										   'issues' : issues,
+										   })
 	# return render(request, 'dbhome.html', {})
+
+
+# functions for using query
+def getActive(s, e, k, n):
+	cntActive = 0
+	cntClosed = 0
+	lastModifiedDate = str(datetime.date.today())
+	start_year = int(s[0])
+	start_month = int(s[1])
+	start_day = int(s[2])
+	end_year = int(e[0])
+	end_month = int(e[1])
+	end_day = int(e[2])
+	res = g_instance.runProcedure('QueryIssueStatus', (n, k, datetime.date(start_year, start_month, start_day),
+													  datetime.date(end_year, end_month, end_day)))
+	if not isinstance(res, tuple):
+		cntActive = int(res.iat[len(res) - 1, 2])
+		cntClosed = int(res.iat[len(res) - 1, 1])
+		lastModifiedDate = str(res.iat[len(res) - 1, 0])
+	return [cntActive, cntClosed, lastModifiedDate]
