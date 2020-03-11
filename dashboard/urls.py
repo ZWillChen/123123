@@ -15,14 +15,17 @@ Including another URLconf
 """
 #from django.contrib import admin
 from django.urls import path
-from django.conf.urls import url, include
-
+from django.conf.urls import url, include, handler404, handler500
+from D8dashboard.views import *
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from .views import *
 
+handler404 = page_not_found
+handler500 = page_error
+
 urlpatterns = [
     url('admin/', admin.site.urls),
     url('', include('D8dashboard.urls')),
-]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

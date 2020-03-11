@@ -140,6 +140,14 @@ def database_dashboard(request):
 	# return render(request, 'dbhome.html', {})
 
 
+def page_not_found(request, exception, template_name='404.html'):
+	return render(request, template_name)
+
+
+def page_error(request, template_name='500.html'):
+	return render(request, template_name)
+
+
 # functions for using query
 def getBarData(s, e, k, n):
 	start_year = int(s[0])
