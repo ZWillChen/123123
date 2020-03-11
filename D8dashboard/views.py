@@ -64,9 +64,9 @@ def index_result(request):
 	else:
 		barData = res[0]
 	return render(request, 'index_result.html', {'pieres': list(pieres),
-												 'lastdate': res[1],
+												 'lastDate': res[1],
 												 'barDates': barData[0],
-												 'barSum':  barData[1],
+												 'barClosed':  barData[1],
 												 'barOpens': barData[2],
 												 'lastkeyword': lastkeyword,
 												 'lastname': lastname,
@@ -160,8 +160,6 @@ def getBarData(s, e, k, n):
 			barData.append(inner)
 		for i in range(len(barData[0])):
 			barData[0][i] = barData[0][i].strftime("%m-%d-%Y")
-		for i in range(len(barData[1])):
-			barData[1][i] = barData[2][i] + barData[1][i]
 	else:
 		lastModifiedDate = datetime.date.today()
 		barData = []

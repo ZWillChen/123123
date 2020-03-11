@@ -21,23 +21,23 @@
                   {% csrf_token %}
                   <div class="d-flex form-group row justify-content-left" style="font-size:13px">
                     <div class="d-flex" style="width:80%">
-                    <label class="col-md-1 col-form-label text-right" for="text-input">Key Word</label>
+                    <label class="col-md-1 col-form-label text-right" for="text-input" style="white-space:nowrap">Key Word</label>
                     <div class="col-md-2">
                       <input class="form-control" id="keyword-input" type="text" name="keyword-input" placeholder="Key Word"><span class="help-block" hidden>This is a help text</span>
                     </div>
 
-                      <label class="col-md-1 col-form-label text-right" for="text-input">Member</label>
+                      <label class="col-md-1 col-form-label text-right" for="text-input" style="white-space:nowrap">Member</label>
                     <div class="col-md-2">
                       <input class="form-control" id="name-input" type="text" name="name-input" placeholder="Member Name"><span class="help-block" hidden>This is a help text</span>
                     </div>
 
-                      <label class="col-md-1 col-form-label text-right" for="date-input">Start Date</label>
+                      <label class="col-md-1 col-form-label text-right" for="date-input" style="white-space:nowrap">Start Date</label>
                     <div class="col-md-2">
                       <input class="form-control" id="start_date-input" type="date" name="start_date-input" placeholder="date">
                       <span class="help-block" id="sdate_err" style="color:#FF0000" hidden>Please enter a valid start date!</span>
                     </div>
 
-                      <label class="col-md-1 col-form-label text-right" for="date-input">End Date</label>
+                      <label class="col-md-1 col-form-label text-right" for="date-input" style="white-space:nowrap">End Date</label>
                     <div class="col-md-2">
                       <input class="form-control" id="end_date-input" type="date" name="end_date-input" placeholder="date">
                       <span class="help-block" id="edate_err" style="color:#FF0000" hidden>Please enter a valid end date!</span>
@@ -75,7 +75,7 @@
 
         <!-- Pie Chart -->
         <div class="card">
-            <div class="card-header">Projects Status: (last updated {{lastDate}})</div>
+            <div class="card-header">Projects Status: (last updated {{lastDate|safe}})</div>
             <div class="card-body">
               <div class="c-chart-wrapper">
                 <canvas id="result-piechart"></canvas>
@@ -134,33 +134,46 @@
     //draw bar chart
     var barDates = {{barDates|safe}};
     var barOpens = {{barOpens}};
-    var barSum = {{barSum}};
-    var bgColor = []
-    for(var i = 0; i < barSum.length; i ++){
-      bgColor.push('rgba(54, 162, 235, 0.2)');
+    var barClosed = {{barClosed}};
+    var closedBgColor = []
+    for(var i = 0; i < barOpens.length; i ++){
+      closedBgColor.push('rgba(54, 162, 235, 0.2)');
     }
+    var openBgColor = []
+    for(var i = 0; i < barOpens.length; i ++){
+      openBgColor.push('#36A2EB');
+    }
+    var maxValue = Math.max(...barOpens, ...barClosed);
 
     var barChart = new Chart(document.getElementById('main-barchart'), {
     type: 'bar',
     data: {
-      labels: ['Open', 'Sum'],
+      labels: ['Open', 'Closed'],
       datasets: [{
-        label: "Open Issues",
+        label: "New Open Issues",
         data: barOpens,
         order: 2,
-        borderColor: ['#36A2EB'],
-        type: 'line'
+        backgroundColor: openBgColor,
       },
       {
-        label: "Total Issues",
-        data: barSum,
+        label: "Closed Issues",
+        data: barClosed,
         order: 1,
-        backgroundColor: bgColor,
+        backgroundColor: closedBgColor,
       }],
       labels: barDates
       },
       options: {
-        responsive: true
+        responsive: true,
+        scales:{
+          yAxes:[{
+            ticks:{
+              suggestedMin: 0,
+              suggestedMax: maxValue + 4,
+              maxTicksLimit: 5,
+            }
+          }]
+        }
       }
     });
   </script>
