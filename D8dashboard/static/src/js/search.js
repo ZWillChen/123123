@@ -27,7 +27,7 @@ function validationCheck(){
 	if(!isValid){
 		document.getElementById("sdate_err").hidden = false;
 		document.getElementById("edate_err").hidden = false;
-		document.getElementById("sdate_err").innerHTML += " Start date must be earlier than end date!";
+		document.getElementById("sdate_err").innerHTML = " Start date must be earlier than end date!";
 	}
 	return isValid;
 }

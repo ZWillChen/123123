@@ -117,13 +117,16 @@
         label: "New Open Issues",
         data: barOpens,
         order: 2,
-        backgroundColor: openBgColor,
+        backgroundColor: closedBgColor,
       },
       {
         label: "Closed Issues",
         data: barClosed,
         order: 1,
-        backgroundColor: closedBgColor,
+        borderColor: ['#36A2EB'],
+        type: 'line',
+        fill: false,
+
       }],
       labels: barDates
       },
@@ -133,7 +136,7 @@
           yAxes:[{
             ticks:{
               suggestedMin: 0,
-              suggestedMax: maxValue + 4,
+              suggestedMax: maxValue*1.25,
               maxTicksLimit: 5,
             }
           }]
