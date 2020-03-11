@@ -9,7 +9,39 @@ import json
 
 
 def index(request):
-	return render(request, 'index.html', {})
+	res = g_instance.runProcedure('QueryIssueStatus', ('', '', datetime.date(1970, 1, 1), datetime.date(2100, 1, 1)))
+	pieres = g_instance.runProcedure('QueryIssueCount', ('', '', datetime.date(1970, 1, 1), datetime.date(2100, 1, 1)))
+
+	if not isinstance(pieres, tuple):
+		cntActive = int(pieres.iat[0, 2])
+		cntClosed = int(pieres.iat[0, 1])
+	else:
+		cntActive = 0
+		cntClosed = 0
+
+	if not isinstance(res, tuple):
+		lastModifiedDate = str(res.iat[len(res) - 1, 0])
+		barData = []
+		for col in res.columns:
+			inner = []
+			for c in res[col].values:
+				inner.append(c)
+			barData.append(inner)
+		for i in range(len(barData[0])):
+			barData[0][i] = barData[0][i].strftime("%m-%d-%Y")
+		for i in range(len(barData[1])):
+			barData[1][i] = barData[2][i] + barData[1][i]
+	else:
+		lastModifiedDate = datetime.date.today()
+		barData = []
+
+	return render(request, 'index.html', {'cntOpen': cntActive,
+										  'cntClose': cntClosed,
+										  'lastDate': lastModifiedDate,
+										  'barDates': barData[0],
+										  'barSum': barData[1],
+										  'barOpens': barData[2],
+										  })
 
 
 def index_result(request):
@@ -27,8 +59,16 @@ def index_result(request):
 
 	# Query
 	pieres = getActive(start_date, end_date, keyword, name)
+	res = getBarData(start_date, end_date, keyword, name)
+	if not res[0]:
+		barData = [[], [], []]
+	else:
+		barData = res[0]
 	return render(request, 'index_result.html', {'pieres': list(pieres),
-												 'lastdate': pieres[2],
+												 'lastdate': res[1],
+												 'barDates': barData[0],
+												 'barSum':  barData[1],
+												 'barOpens': barData[2],
 												 'lastkeyword': lastkeyword,
 												 'lastname': lastname,
 												 'laststart': laststart,
@@ -48,6 +88,7 @@ def search(request):
 	return render(request, 'search.html', {})
 
 
+# Search Result
 def result(request):
 	# Preserve input args for next search
 	lastkeyword = request.POST.get('keyword-input')
@@ -101,10 +142,7 @@ def database_dashboard(request):
 
 
 # functions for using query
-def getActive(s, e, k, n):
-	cntActive = 0
-	cntClosed = 0
-	lastModifiedDate = str(datetime.date.today())
+def getBarData(s, e, k, n):
 	start_year = int(s[0])
 	start_month = int(s[1])
 	start_day = int(s[2])
@@ -114,7 +152,35 @@ def getActive(s, e, k, n):
 	res = g_instance.runProcedure('QueryIssueStatus', (n, k, datetime.date(start_year, start_month, start_day),
 													  datetime.date(end_year, end_month, end_day)))
 	if not isinstance(res, tuple):
-		cntActive = int(res.iat[len(res) - 1, 2])
-		cntClosed = int(res.iat[len(res) - 1, 1])
 		lastModifiedDate = str(res.iat[len(res) - 1, 0])
-	return [cntActive, cntClosed, lastModifiedDate]
+		barData = []
+		for col in res.columns:
+			inner = []
+			for c in res[col].values:
+				inner.append(c)
+			barData.append(inner)
+		for i in range(len(barData[0])):
+			barData[0][i] = barData[0][i].strftime("%m-%d-%Y")
+		for i in range(len(barData[1])):
+			barData[1][i] = barData[2][i] + barData[1][i]
+	else:
+		lastModifiedDate = datetime.date.today()
+		barData = []
+	return [barData, lastModifiedDate]
+
+
+def getActive(s, e, k, n):
+	cntActive = 0
+	cntClosed = 0
+	start_year = int(s[0])
+	start_month = int(s[1])
+	start_day = int(s[2])
+	end_year = int(e[0])
+	end_month = int(e[1])
+	end_day = int(e[2])
+	res = g_instance.runProcedure('QueryIssueCount', (n, k, datetime.date(start_year, start_month, start_day),
+													  datetime.date(end_year, end_month, end_day)))
+	if not isinstance(res, tuple):
+		cntActive = int(res.iat[0, 2])
+		cntClosed = int(res.iat[0, 1])
+	return [cntActive, cntClosed]

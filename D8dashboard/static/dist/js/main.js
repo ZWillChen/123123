@@ -19,17 +19,3 @@ Chart.defaults.global.tooltips.custom = coreui.ChartJS.customTooltips;
 Chart.defaults.global.defaultFontColor = '#646470';
 Chart.defaults.global.responsiveAnimationDuration = 1;
 
-var pieChart = new Chart(document.getElementById('main-piechart'), {
-  type: 'pie',
-  data: {
-    labels: ['Red', 'Green', 'Yellow'],
-    datasets: [{
-      data: [300, 50, 100],
-      backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-      hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
-    }]
-  },
-  options: {
-    responsive: true
-  }
-});

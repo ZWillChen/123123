@@ -46,7 +46,7 @@
 
                     <div class="d-flex justify-content-center" style="width:20%">
                       <div class="col-md-6">
-                        <button class="btn btn-info" type="submit" style="width:100%" onclick="GoClick()"> <strong>Go!</strong> </button>
+                        <button class="btn btn-info" type="button" style="width:100%" onclick="GoClick()"> <strong>Go!</strong> </button>
                       </div>
                       <div class="col-md-6">
                         <button class="btn btn-dark" type="reset" style="width: 100%" onclick="Reset()"> Reset</button>
@@ -61,59 +61,21 @@
       </div>
     </div>      
       <!-- <h1>Welcome</h1> -->
-      <div class="card-columns cols-2">
-        <!--  Widget-->
-        <div class="card"> 
-          <div class="card-header">Projects Summary</div>
+      <div class="card-columns cols-2 ">
 
-          <div class="card-body bg-info text-white border-white">
-            <div class="text-muted text-right mb-4">
-              Optional text here
-              <svg class="c-icon c-icon-2xl">
-                <use xlink:href="{% static 'dist/vendors/@coreui/icons/svg/free.svg' %}#cil-file"></use>
-              </svg>
-            </div>
-            <div class="text-value-lg" style="margin-top: -30px">87</div>
-            <small class="text-muted text-uppercase font-weight-bold">Ongoing Projects</small>
-            <div class="progress progress-white progress-xs mt-3">
-              <div class="progress-bar" role="progressbar" style="width: 87%" aria-valuenow="25" aria-valuemin="0" 
-              aria-valuemax="100"></div>
+        <!-- Bar Chart -->
+        <div class="card">
+          <div class="card-header">Projects Trend</div>
+          <div class="card-body">
+            <div class="c-chart-wrapper">
+              <canvas id="main-barchart"></canvas>
             </div>
           </div>
-
-          <div class="card-body bg-success text-white border-white">
-            <div class="text-muted text-right mb-4">
-              <svg class="c-icon c-icon-2xl">
-                <use xlink:href="{% static 'dist/vendors/@coreui/icons/svg/free.svg' %}#cil-file"></use>
-              </svg>
-            </div>
-            <div class="text-value-lg" style="margin-top: -30px">100</div>
-            <small class="text-muted text-uppercase font-weight-bold">All Projects</small>
-            <div class="progress progress-white progress-xs mt-3">
-              <div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="25" aria-valuemin="0" 
-              aria-valuemax="100"></div>
-            </div>
-          </div>
-
-          <div class="card-body bg-dark text-white border-white">
-            <div class="text-muted text-right mb-4">
-              <svg class="c-icon c-icon-2xl">
-                <use xlink:href="{% static 'dist/vendors/@coreui/icons/svg/free.svg' %}#cil-file"></use>
-              </svg>
-            </div>
-            <div class="text-value-lg" style="margin-top: -30px">33</div>
-            <small class="text-muted text-uppercase font-weight-bold">Issues</small>
-            <div class="progress progress-white progress-xs mt-3">
-              <div class="progress-bar" role="progressbar" style="width: 33%" aria-valuenow="25" aria-valuemin="0" 
-              aria-valuemax="100"></div>
-            </div>
-          </div>
-
         </div>
 
         <!-- Pie Chart -->
-        <div class="card" style="min-height: "> 
-            <div class="card-header">Projects Percentage</div>
+        <div class="card">
+            <div class="card-header">Projects Status: (last updated {{lastDate}})</div>
             <div class="card-body">
               <div class="c-chart-wrapper">
                 <canvas id="main-piechart"></canvas>
@@ -132,4 +94,56 @@
   <script src="{% static 'dist/vendors/@coreui/utils/js/coreui-utils.js' %}"></script>
   <script src="{% static 'dist/js/main.js' %}"></script>
   <script src="{% static 'src/js/search.js' %}"></script>
+  <script type="text/javascript">
+    //draw bar chart
+    var barDates = {{barDates|safe}};
+    var barOpens = {{barOpens}};
+    var barSum = {{barSum}};
+    var bgColor = []
+    for(var i = 0; i < barSum.length; i ++){
+      bgColor.push('rgba(54, 162, 235, 0.2)');
+    }
+
+    var barChart = new Chart(document.getElementById('main-barchart'), {
+    type: 'bar',
+    data: {
+      labels: ['Open', 'Sum'],
+      datasets: [{
+        label: "Open Issues",
+        data: barOpens,
+        order: 2,
+        borderColor: ['#36A2EB'],
+        type: 'line'
+      },
+      {
+        label: "Total Issues",
+        data: barSum,
+        order: 1,
+        backgroundColor: bgColor,
+      }],
+      labels: barDates
+      },
+      options: {
+        responsive: true
+      }
+    });
+
+    //draw pie chart summary
+    var open = {{cntOpen}};
+    var close = {{cntClose}};
+    var pieChart = new Chart(document.getElementById('main-piechart'), {
+    type: 'pie',
+    data: {
+      labels: ['Open', 'Closed'],
+      datasets: [{
+        data: [open, close],
+        backgroundColor: ['#FF6384', '#36A2EB'],
+        hoverBackgroundColor: ['#FF6384', '#36A2EB']
+      }]
+      },
+      options: {
+        responsive: true
+      }
+    });
+  </script>
 {% endblock %}
