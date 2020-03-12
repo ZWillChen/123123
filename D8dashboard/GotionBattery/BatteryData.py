@@ -137,7 +137,12 @@ class GotionMySql:
                                          password=self.password,
                                          db=self.db,
                                          cursorclass=pymysql.cursors.DictCursor)
-            self.cursor = connection.cursor()
+            try:
+                self.cursor = connection.cursor()
+            except:
+                connection.ping(reconnect=True)
+                self.cursor = connection.cursor()
+
             self.connection = connection
             print('connect to the database' + ' ' + self.db)
 
@@ -167,7 +172,7 @@ class GotionMySql:
         self.connection.commit()
         if df_return and query_results:
             query_results = pd.DataFrame(query_results)
-        self.cursor.close()
+
         return query_results
 
     def DF2MySQLTable(self, table_name: str, table: pd.DataFrame):

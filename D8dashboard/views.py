@@ -9,30 +9,14 @@ import json
 
 
 def index(request):
-	res = g_instance.runProcedure('QueryIssueStatus', ('', '', datetime.date(1970, 1, 1), datetime.date(2100, 1, 1)))
-	pieres = g_instance.runProcedure('QueryIssueCount', ('', '', datetime.date(1970, 1, 1), datetime.date(2100, 1, 1)))
 
-	if not isinstance(pieres, tuple):
-		cntActive = int(pieres.iat[0, 2])
-		cntClosed = int(pieres.iat[0, 1])
-	else:
-		cntActive = 0
-		cntClosed = 0
+	# pie chart data
+	cntActive = getActive([1970, 1, 1], [2100, 1, 1], '', '')[0]
+	cntClosed = getActive([1970, 1, 1], [2100, 1, 1], '', '')[1]
 
-	if not isinstance(res, tuple):
-		lastModifiedDate = str(res.iat[len(res) - 1, 0])
-		barData = []
-		for col in res.columns:
-			inner = []
-			for c in res[col].values:
-				inner.append(c)
-			barData.append(inner)
-		for i in range(len(barData[0])):
-			barData[0][i] = barData[0][i].strftime("%m-%d-%Y")
-
-	else:
-		lastModifiedDate = datetime.date.today()
-		barData = []
+	# bar chart data
+	lastModifiedDate = getBarData([1970, 1, 1], [2100, 1, 1], '', '')[1]
+	barData = getBarData([1970, 1, 1], [2100, 1, 1], '', '')[0]
 
 	return render(request, 'index.html', {'cntOpen': cntActive,
 										  'cntClose': cntClosed,
