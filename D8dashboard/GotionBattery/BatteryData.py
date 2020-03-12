@@ -167,7 +167,7 @@ class GotionMySql:
         self.connection.commit()
         if df_return and query_results:
             query_results = pd.DataFrame(query_results)
-
+        self.cursor.close()
         return query_results
 
     def DF2MySQLTable(self, table_name: str, table: pd.DataFrame):
