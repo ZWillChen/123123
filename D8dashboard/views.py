@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.utils import timezone
+from django.views.decorators.cache import cache_page
 from .models import Members
 from .models import Issue
 from .GotionBattery.TestSQL import g_instance
@@ -8,8 +8,9 @@ import json
 # Create your views here. #
 
 
+@cache_page(60 * 60)
 def index(request):
-
+	g_instance.connect()
 	# pie chart data
 	cntActive = getActive([1970, 1, 1], [2100, 1, 1], '', '')[0]
 	cntClosed = getActive([1970, 1, 1], [2100, 1, 1], '', '')[1]
@@ -28,11 +29,10 @@ def index(request):
 
 
 def index_result(request):
+	g_instance.connect()
 	# Preserve input args for next search
-	lastkeyword = request.POST.get('keyword-input')
-	lastname    = request.POST.get('name-input')
-	laststart   = request.POST.get('start_date-input')
-	lastend     = request.POST.get('end_date-input')
+	laststart = request.POST.get('start_date-input')
+	lastend = request.POST.get('end_date-input')
 
 	# Receive submit from form
 	start_date = request.POST.get('start_date-input').split('-')
@@ -52,8 +52,8 @@ def index_result(request):
 												 'barDates': barData[0],
 												 'barClosed':  barData[1],
 												 'barOpens': barData[2],
-												 'lastkeyword': lastkeyword,
-												 'lastname': lastname,
+												 'lastkeyword': keyword,
+												 'lastname': name,
 												 'laststart': laststart,
 												 'lastend': lastend,
 												 })
@@ -73,11 +73,12 @@ def search(request):
 
 # Search Result
 def result(request):
+	g_instance.connect()
 	# Preserve input args for next search
-	lastkeyword = request.POST.get('keyword-input')
-	lastname    = request.POST.get('name-input')
 	laststart   = request.POST.get('start_date-input')
 	lastend     = request.POST.get('end_date-input')
+	keyword = request.POST.get('keyword-input')
+	name = request.POST.get('name-input')
 
 	# Store results in results list
 	results = []
@@ -89,17 +90,16 @@ def result(request):
 	end_year = int(end_date[0])
 	end_month = int(end_date[1])
 	end_day = int(end_date[2])
-	keyword = request.POST.get('keyword-input')
-	name = request.POST.get('name-input')
+
 	res = g_instance.runProcedure('QueryIssue', (name, keyword, datetime.date(start_year, start_month, start_day),
 		datetime.date(end_year, end_month, end_day)))
 	if isinstance(res, tuple):
 		emptyMsg = "No result to display"
-		return render(request, 'search_result.html', {'emptyMsg' : emptyMsg,
-													  'lastkeyword' : lastkeyword,
-													  'lastname' : lastname,
-													  'laststart' : laststart,
-													  'lastend' : lastend,
+		return render(request, 'search_result.html', {'emptyMsg': emptyMsg,
+													  'lastkeyword': keyword,
+													  'lastname': name,
+													  'laststart': laststart,
+													  'lastend': lastend,
 													  })
 	for i in range(len(res)):
 		inner = []
@@ -107,19 +107,20 @@ def result(request):
 			inner.append(res.iat[i, j])
 		results.append(inner)
 
-	return render(request, 'search_result.html', {'results' : results,
-												  'lastkeyword' : lastkeyword,
-												  'lastname' : lastname,
-												  'laststart' : laststart,
-												  'lastend' : lastend,
+	return render(request, 'search_result.html', {'results': results,
+												  'lastkeyword': keyword,
+												  'lastname': name,
+												  'laststart': laststart,
+												  'lastend': lastend,
 												  })
 
 
+@cache_page(15 * 60)
 def database_dashboard(request):
 	members = Members.objects.all()
 	issues = Issue.objects.all()
-	return render(request, 'dbhome.html', {'members' : members,
-										   'issues' : issues,
+	return render(request, 'dbhome.html', {'members': members,
+										   'issues': issues,
 										   })
 	# return render(request, 'dbhome.html', {})
 

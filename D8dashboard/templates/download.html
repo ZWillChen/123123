@@ -2,5 +2,26 @@
 {% load static %}
 
 {% block content %}
-	<h1>Here is file download!</h1>
+<div class="card">
+	<div class="card-header">Template Download
+		<div class="card-header-actions">
+			<!-- Add actions if needed-->
+		</div>
+	</div>
+	<div class="card-body">
+		<p class="text-muted">D8 template file</p>
+		<div class="bd-example tooltip-demo">
+			<p class="muted">Some descriptions about template file:
+				<a href="#" data-toggle="tooltip" title="" data-original-title="reminder content">for example, </a>
+				we can also add text on hover
+				<a href="#" data-toggle="tooltip" title="" data-original-title="Another tooltip">like this. </a>
+				If you have any good idea please tell me.
+			</p>
+		</div>
+	</div>
+	<div class="card-footer d-flex content-justify-right">
+		<button class="btn btn-secondary" type="button" data-toggle="tooltip" data-placement="download template" title="Download">Download</button>
+	</div>
+</div>
+
 {% endblock %}
