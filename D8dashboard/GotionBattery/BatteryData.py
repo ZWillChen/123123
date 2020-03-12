@@ -1,8 +1,10 @@
 __author__ = "Tony Li"
-__credits__ = ["Tony Li", "Zihao Chen"]
+__credits__ = ["Tony Li", "new guy"]
 __version__ = "1.1.0"
 __maintainer__ = "Tony Li"
 __status__ = "R&D"
+
+DEBUG = 1
 
 import os
 import pandas as pd
@@ -137,18 +139,12 @@ class GotionMySql:
                                          password=self.password,
                                          db=self.db,
                                          cursorclass=pymysql.cursors.DictCursor)
-            try:
-                self.cursor = connection.cursor()
-            except:
-                connection.ping(reconnect=True)
-                self.cursor = connection.cursor()
-
+            self.cursor = connection.cursor()
             self.connection = connection
             print('connect to the database' + ' ' + self.db)
 
-        except Exception as e:
-            print('cannot connect to the database')
-            print(e)
+        except:
+            print('can not connect to the database')
 
     def runSqlQuery(self, sql_statement: str) -> object:
 
@@ -175,22 +171,25 @@ class GotionMySql:
 
         return query_results
 
-    def DF2MySQLTable(self, table_name: str, table: pd.DataFrame):
+    def df2MysqlTable(self, table_name: str, table: pd.DataFrame):
         table.to_sql(table_name, self.alchemy_engine, if_exists='append', index=False)
         print('pushed ' + table_name + ' to the database')
 
-    def update8Dmembers(self, doc_members):
+    def __update8Dmembers(self, doc_members):
         member_list = self.runProcedure('QueryMember')
         rows_list = []
         for member_name in doc_members.unique():
             member_name = member_name.strip()
-            print('print %s not find in the Member table' % member_name)
             if not member_list['Name'].str.contains(member_name).any():
+                print('%s not find in the Member table' % member_name)
                 rows_list.append({'Name': member_name})
-            print('following members added to the member table')
-            print(rows_list)
+                print('following members added to the member table')
         if rows_list:
-            self.DF2MySQLTable('Members', pd.DataFrame(rows_list))
+            self.df2MysqlTable('Members', pd.DataFrame(rows_list))
+
+    def __process8DTables(self, Action_Table):
+
+        pass
 
     def upload8DTables(self, d_list: list):
 
@@ -208,18 +207,20 @@ class GotionMySql:
         issue = d_list['D0']
         # assign description item to table issue
         issue['Description'] = d_list['D2'][d_list['D2'].columns[0]].values
-        self.DF2MySQLTable('Issue', issue)
+        self.df2MysqlTable('Issue', issue)
+        file_bin = pymysql.Binary(d_list['file'])
+        self.runProcedure('UploadFile', (file_bin, issue_id))
 
         # prepare the Team table D1
         # get the member table to check if member already in the team
+        meb_tb = self.runProcedure('QueryMember')
         tm_tb = d_list['D1']
 
         if not tm_tb.empty:
-
-            self.update8Dmembers(tm_tb['Name'])  # check if the existing table needs update
+            self.__update8Dmembers(tm_tb['Name'])  # check if the existing table needs update
             meb_tb = self.runProcedure('QueryMember')
-
             rows_list = []
+
             for name in tm_tb['Name']:
                 name = name.strip()  # remove leading and trailing whitespace
                 a = meb_tb['Name'].str.contains(name)
@@ -229,21 +230,74 @@ class GotionMySql:
                            'member_id': mem_indx}
                     rows_list.append(tmp)
             team = pd.DataFrame(rows_list)
-            self.DF2MySQLTable('Team', team)
+            self.df2MysqlTable('Team', team)
         else:
             pass
 
-        # prepare the Actions items
-        actions_items = d_list['Action']
+        # process D3-D7
+        print('test')
+        rename_list1 = {'D3': 'Contain_Symptons',
+                        'D4': 'Root_Causes',
+                        'D5': 'Select/Verify_Corrective_Actions',
+                        'D6': 'Implement/Validate_Corrective_Actions',
+                        'D7': 'Prevent_Recurrence'}
 
-        if actions_items:
+        rename_list2 = {'D3': 'Implementation_Date',
+                        'D4': 'Evidence',
+                        'D5': 'Verification',
+                        'D6': 'Implementation_Date',
+                        'D7': 'Implementation_Date'}
 
-            for name in actions_items['Owner']:
+        for d_tmp in ('D3', 'D4', 'D5', 'D6', 'D7'):
+            tmp = d_list[d_tmp]
+
+            tmp.rename(columns={tmp.columns[0]: rename_list1[d_tmp]}, inplace=True)
+            tmp.rename(columns={tmp.columns[1]: rename_list2[d_tmp]}, inplace=True)
+
+            tmp['Issue_id'] = issue_id
+
+            self.df2MysqlTable(d_tmp, tmp)
+
+        # process D8
+        tm_tb = d_list['D8']
+        if not tm_tb.empty:
+
+            rows_list = []
+
+            for name in tm_tb['Name']:
+                name = name.strip()  # remove leading and trailing whitespace
                 a = meb_tb['Name'].str.contains(name)
                 if a.any():
                     mem_indx = meb_tb['id'][a].iloc[-1]
+                    tmp = {'issue_id': issue_id,
+                           'member_id': mem_indx,
+                           'Closure Date':
+                               tm_tb['Closure Date'][a[a==True].index[0]]} # add the closure time
+                    rows_list.append(tmp)
+            D8 = pd.DataFrame(rows_list)
+            self.df2MysqlTable('D8', D8)
+        else:
+            return 1, 'the recognized team member is not in database or your team session'
+
+        # process the Actions items
+        actions_items = d_list['Action']
+
+        if not actions_items.empty:
+            actions_items['Member_id'] = -1
+            actions_items['Issue_id'] = issue_id
+            for i in range(len(actions_items['Owner'])):
+                name = actions_items['Owner'][i]
+                a = meb_tb['Name'].str.contains(name)
+                if a.any():
+                    mem_indx = meb_tb['id'][a].iloc[-1]
+                    actions_items.at[i, 'Member_id'] = mem_indx
                 else:
                     return 1, 'you have someone not in the team but in the action list'
+            actions_items = actions_items.drop(columns='Owner')
+
+            self.df2MysqlTable('Action', actions_items)
+
+        return 0, 'success'
 
     def fetchAllTablesName(self):
         tables = self.runSqlQuery \
