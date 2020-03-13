@@ -4,6 +4,10 @@
 <!--Headers-->
 {% include 'base/header.html' %}
 
+<!-- template customized link  -->
+{% block extrahead %}
+{% endblock %}
+
 <!-- BODY options, add following classes to body to change options
 
 // Header options
@@ -37,13 +41,15 @@
 
 <!--Sidebar-->
 {% include 'base/sidebar.html' %}
-
+{% block sidebar %}
+{% endblock %}
 
 <div class="c-wrapper">
     
     <!--Navbar-->
     {% include 'base/navbar.html' %}
-
+    {% block navbar %}
+    {% endblock %}
 
     <!-- Main content -->
     <div class="c-body">
@@ -62,12 +68,15 @@
 
     <!--Footer-->
     {% include 'base/footer.html' %}
-
+    {% block extrafooter %}
+    {% endblock %}
 </div>
 
 
 <!--JS-->
 {% include 'base/js.html' %}
-
+<!-- Extra JS  -->
+{% block script %}
+{% endblock %}
 </body>
 </html>

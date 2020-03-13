@@ -1,8 +1,11 @@
 from django.shortcuts import render
+from django.http import HttpResponse, StreamingHttpResponse, FileResponse
 from django.views.decorators.cache import cache_page
+from django.views.decorators.csrf import csrf_exempt
 from .models import Members
 from .models import Issue
 from .GotionBattery.TestSQL import g_instance
+from .GotionBattery.BatteryDocs import DocProcess
 import datetime
 import json
 # Create your views here. #
@@ -63,8 +66,54 @@ def file_upload(request):
 	return render(request, 'upload.html', {})
 
 
+def upload_8Dfile(request):
+	if request.method == "POST":
+		file = request.FILES.get("file")
+		with open('D8dashboard/GotionBattery/temp/tempfile.xlsx', "wb+") as destination:
+			if file:
+				for chunk in file.chunks():
+					destination.write(chunk)
+				destination.close()
+			else:
+				return render(request, 'upload_feedback.html', {'Error': "File does not exist: " + str(type(file))})
+		xls_ins = DocProcess('D8dashboard/GotionBattery/temp/tempfile.xlsx')
+		(error_code, d_list, s_list) = xls_ins.process8Dfile()
+		if error_code != 0:
+			error = "The upload file has errors: error code is " + str(error_code)
+			return render(request, 'upload_feedback.html', {'Error': error})
+		else:
+			g_instance.connect()
+			g_instance.upload8DTables(d_list)
+			return render(request, 'upload_feedback.html', {})
+
+	return render(request, 'upload_feedback.html', {})
+
+
+def upload_result(request):
+	return render(request, 'upload_feedback.html', {})
+
+
 def file_download(request):
 	return render(request, 'download.html', {})
+
+
+def download_8Dtemplate(request):
+	g_instance.connect()
+	# Query file
+	f = g_instance.runProcedure('DownloadFile', (1,), 0)
+	if f:
+		with open('D8dashboard/GotionBattery/8Ddownload.xlsx', "wb") as local_file:
+			local_file.write(f[0]['file'])
+			local_file.close()
+		with open('D8dashboard/GotionBattery/8Ddownload.xlsx', "rb") as download_file:
+			response = HttpResponse(download_file)
+			response['Content-Type'] = 'application/octet-stream'
+			response['Content-Disposition'] = 'attachment; filename="8Ddownload.xlsx"'
+			return response
+	else:
+		error = "Error loading file from database - File does not exist."
+		return render(request, 'download.html', {'Error': error,
+												 })
 
 
 def search(request):	

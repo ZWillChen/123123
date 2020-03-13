@@ -1,0 +1,19 @@
+
+.progressFrame{
+    width: 100%;
+    height: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    background: #cecece;
+    margin-top: 10px;
+    margin-left: 0px;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.progress{
+    width: 0px;
+    height: 9.5px;
+    background: #00b383;
+}

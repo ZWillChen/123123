@@ -1,27 +1,44 @@
 {% extends 'base/base.html' %}
 {% load static %}
+{% block extrahead %}
+	<!-- css of progress bar -->
+{% endblock %}
+
 
 {% block content %}
-<div class="card">
-	<div class="card-header">Template Download
-		<div class="card-header-actions">
-			<!-- Add actions if needed-->
+
+	<div class="card">
+		<div class="card-header">Template Download
+			<div class="card-header-actions">
+				<!-- Add actions if needed-->
+			</div>
+		</div>
+		<div class="card-body">
+			<p class="text-muted">D8 template file</p>
+			<div class="bd-example tooltip-demo">
+				<p class="muted">Some descriptions about template file:
+					<a href="#" data-toggle="tooltip" title="reminder content">for example, </a>
+					we can also add text on hover
+					<a href="#" data-toggle="tooltip" title="" data-original-title="Another tooltip">like this. </a>
+					If you have any good idea please tell me.
+				</p>
+				{% if Error %}
+					<p class="text-muted"> {{Error}} </p>
+				{% endif%}
+			</div>
+		</div>
+		<div class="card-footer d-flex content-justify-right">
+			<a href="{% url 'download_8Dtemplate' %}" class="btn btn-secondary" type="button" data-toggle="tooltip" data-placement="top" title="Download reminder">
+				Download
+			</a>
 		</div>
 	</div>
-	<div class="card-body">
-		<p class="text-muted">D8 template file</p>
-		<div class="bd-example tooltip-demo">
-			<p class="muted">Some descriptions about template file:
-				<a href="#" data-toggle="tooltip" title="" data-original-title="reminder content">for example, </a>
-				we can also add text on hover
-				<a href="#" data-toggle="tooltip" title="" data-original-title="Another tooltip">like this. </a>
-				If you have any good idea please tell me.
-			</p>
-		</div>
-	</div>
-	<div class="card-footer d-flex content-justify-right">
-		<button class="btn btn-secondary" type="button" data-toggle="tooltip" data-placement="download template" title="Download">Download</button>
-	</div>
-</div>
 
 {% endblock %}
+
+{% block script %}
+
+    <!--Tooltip for global use -->
+    <script src="{% static 'dist/js/tooltips.js' %}"></script>
+
+{% endblock%}

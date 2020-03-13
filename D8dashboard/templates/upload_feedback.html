@@ -1,0 +1,51 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block extrahead %}
+	<!-- css of progress bar -->
+    <link href="{% static 'src/css/progress_bar.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+	<div class="card">
+		<div class="card-header">File Uploaded
+			<div class="card-header-actions">
+				<!-- Add actions if needed-->
+			</div>
+		</div>
+		<div class="card-body">
+			<!--Description-->
+			<div style="min-height:20px"></div>
+			<div class="bd-example tooltip-demo">
+				{% if Error %}
+					<p class="muted">Upload Failed</p>
+					<p class="text-muted"> {{Error}} </p>
+				{% endif %}
+
+				{% if not Error%}
+					<p class="muted">Upload Success</p>
+				{% endif %}
+
+				{% if Message %}
+					<p class="text-muted"><strong>{{ Message }}</strong></p>
+				{% endif %}
+			</div>
+		</div>
+		<div class="card-footer d-flex content-justify-right">
+			<a href="{% url 'file_upload' %}" class="btn btn-secondary" type="button"
+			   data-toggle="tooltip" data-placement="top" title="Upload reminder"
+				style="min-width:100px">
+				Back
+			</a>
+		</div>
+	</div>
+
+{% endblock %}
+
+
+{% block script %}
+
+    <!--Tooltip for global use -->
+<script src="{% static 'dist/js/tooltips.js' %}"></script>
+
+{% endblock%}

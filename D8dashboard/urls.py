@@ -8,8 +8,13 @@ urlpatterns = [
 	# Homepage 
     url(r'^$', views.index, name='home'),
     # File Operation
+        # Upload
     url(r'^upload$', views.file_upload, name='file_upload'),
+    url(r'^upload/file$', views.upload_8Dfile, name='upload_8D'),
+    url(r'^upload/result$', views.upload_result, name='upload_result'),
+        # Download
     url(r'^download$', views.file_download, name='file_download'),
+    url(r'^download/8Dtemplate.xlsx$', views.download_8Dtemplate, name='download_8Dtemplate'),
     # Dashboard
     url(r'^dbdashboard$', views.database_dashboard, name='database_dashboard'),
     # Search and Result

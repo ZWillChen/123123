@@ -1,11 +1,10 @@
 {% load static %}
-{% block script %}
 
-    <!-- CoreUI and necessary plugins-->
-    <script src="{% static 'dist/vendors/@coreui/coreui/js/coreui.bundle.min.js' %}"></script>
-    
-    <!--[if IE]><!-->
-    <script src="{% static 'dist/vendors/@coreui/icons/js/svgxuse.min.js' %}"></script>
-    <!--<![endif]-->
+<!-- CoreUI and necessary plugins-->
+<script src="{% static 'dist/vendors/@coreui/coreui/js/coreui.bundle.min.js' %}"></script>
+<!-- Jquery-->
+<script src="{% static 'dist/vendors/js/jquery.min.js' %}"></script>
 
-{% endblock %}
+<!--[if IE]><!-->
+<script src="{% static 'dist/vendors/@coreui/icons/js/svgxuse.min.js' %}"></script>
+<!--<![endif]-->

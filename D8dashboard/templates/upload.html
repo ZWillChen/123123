@@ -1,6 +1,149 @@
 {% extends 'base/base.html' %}
 {% load static %}
+{% block extrahead %}
+	<!-- css of progress bar -->
+    <link href="{% static 'src/css/progress_bar.css' %}" rel="stylesheet">
+{% endblock %}
 
 {% block content %}
-	<h1>Here is file upload!</h1>
+
+	<div class="card">
+		<div class="card-header">File Upload
+			<div class="card-header-actions">
+				<!-- Add actions if needed-->
+			</div>
+		</div>
+		<div class="card-body">
+			<p class="text-muted">Please upload your D8 file</p>
+			<div class="row">
+				<div class="col-md-12 align-self-center">
+					<!--Upload button-->
+					<form enctype="multipart/form-data" method="post" action="{% url 'upload_8D' %}" id="form">
+						{% csrf_token %}
+						<div class="form-group d-flex content-justify-left">
+							<label class="control-label">File:</label>
+							<div class="col-md-4">
+								<!--File upload-->
+								<input id="FileUpload" type="file" style="display: none" name="file">
+								<!--Display: File name-->
+								<input class="text-muted" type="text" id="FileCover" style="border:1px solid #f2f2f2; width:400px;" readonly="true" placeholder="Please select a file to upload">
+							</div>
+							<div class="col-md-1">
+								<!--Select-->
+								<button class="btn btn-outline-dark btn-sm " type="button" onclick="$('input[id=FileUpload]').click();">
+									<i class="fa fa-folder-open" id="browse">Select file</i>
+								</button>
+							</div>
+							<div class="col-md-1" style="margin-left:-20px">
+								<!--Upload-->
+								<button class="btn btn-success btn-sm " type="button" onclick="MyUpload()">
+									<i class="fa fa-send" id="upload_status">Upload</i>
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<!--Progress bar-->
+			<div class="row">
+				<div class="col-md-6 align-self-center">
+					<div class="progressFrame">
+						<div id="progress" class="progress"></div>
+					</div>
+				</div>
+				<div class="row" id="complete_mark" hidden>
+					<svg style="width:30px; height:30px; fill:#00b383;">
+					  <use xlink:href="{% static 'dist/vendors/@coreui/icons/svg/free.svg' %}#cil-check-alt"></use>
+					</svg>
+					<p>Then click Confirm to submit.</p>
+				</div>
+			</div>
+			<!--Description-->
+			<div style="min-height:20px"></div>
+			<div class="bd-example tooltip-demo">
+				<p class="muted">Select your file and upload, then click confirm.</p>
+				<p>
+				<p><a href="#" data-toggle="tooltip" title="reminder content">File restriction: </a></p>
+					1. No larger than 5 MB.
+				</p>
+				{% if Error %}
+					<p class="text-muted"> {{Error}} </p>
+				{% endif%}
+				{% if Message %}
+					<p class="text-muted"><strong>{{ Message }}</strong></p>
+				{% endif %}
+			</div>
+		</div>
+		<div class="card-footer d-flex content-justify-right">
+			<a href="#" class="btn btn-secondary" type="button"
+			   data-toggle="tooltip" data-placement="top" title="Upload reminder"
+				style="min-width:100px" onclick="confirmClick()">
+				Confirm
+			</a>
+		</div>
+	</div>
+
 {% endblock %}
+
+
+{% block script %}
+
+    <!--Tooltip for global use -->
+<script src="{% static 'dist/js/tooltips.js' %}"></script>
+<script type="text/javascript">
+
+	$('input[id=FileUpload]').change(function () {
+		var file = document.getElementById("FileUpload").files;
+		var filename = file[0].name;
+		console.log(filename);
+		$('#FileCover').val(filename);
+		document.getElementById('progress').style.width = 0;
+		document.getElementById('complete_mark').hidden = true;
+	})
+
+	function MyUpload(){
+    	var file = document.getElementById("FileUpload").files[0];
+    	var data = new FormData();
+   		document.getElementById('progress').style.width = 0;//每次点击上传按钮把进度条清空
+   		document.getElementById('complete_mark').hidden = true;
+        data.append('file', file);// 获取文件放入FormData中
+		var xhr = new XMLHttpRequest();
+		xhr.upload.addEventListener('progress',on_progress,false);
+		xhr.upload.addEventListener('abort', () => console.log("upload aborted"));
+		xhr.upload.addEventListener('error', err => {console.log(err)});
+		xhr.upload.addEventListener('loadstart',() => console.log("upload start!"));
+		xhr.upload.addEventListener('loadend',() => console.log("upload end!"));
+
+		xhr.open('POST', '{% url 'upload_8D' %}', true);
+		xhr.setRequestHeader('X-CSRFTOKEN', '{{request.COOKIES.csrftoken}}');
+		// 上传完成后的回调函数
+		xhr.onload = function () {
+		  if (xhr.status === 200) {
+		　　console.log('upload success');
+			document.getElementById('complete_mark').hidden = false;
+		  } else {
+		  	console.log(xhr.status);
+		  　console.log('upload failed');
+		  }
+		};
+		// 获取上传进度
+		xhr.send(data);
+    }
+
+	function on_progress(evt){
+		if(evt.lengthComputable){
+			var ele = document.getElementById('progress');
+			var percent = Math.round((evt.loaded * 100 / evt.total));
+			ele.style.width = percent + '%';
+			console.log(percent);
+		}
+	}
+
+	function confirmClick(){
+		document.getElementById('form').submit();
+	}
+
+	</script>
+
+{% endblock%}
