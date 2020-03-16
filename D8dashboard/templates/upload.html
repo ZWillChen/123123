@@ -26,17 +26,17 @@
 								<!--File upload-->
 								<input id="FileUpload" type="file" style="display: none" name="file">
 								<!--Display: File name-->
-								<input class="text-muted" type="text" id="FileCover" style="border:1px solid #f2f2f2; width:400px;" readonly="true" placeholder="Please select a file to upload">
+								<input class="text-muted" type="text" id="FileCover" style="border:1px solid #f2f2f2; width:100%;" readonly="true" placeholder="Please select a file to upload">
 							</div>
-							<div class="col-md-1">
+							<div class="col-md-1" style="white-space:nowrap">
 								<!--Select-->
-								<button class="btn btn-outline-dark btn-sm " type="button" onclick="$('input[id=FileUpload]').click();">
-									<i class="fa fa-folder-open" id="browse">Select file</i>
+								<button class="btn btn-outline-dark btn-sm" style="width:100%" type="button" onclick="$('input[id=FileUpload]').click();">
+									Browse
 								</button>
 							</div>
-							<div class="col-md-1" style="margin-left:-20px">
+							<div class="col-md-1" style="margin-left:-10px; white-space:nowrap">
 								<!--Upload-->
-								<button class="btn btn-success btn-sm " type="button" onclick="MyUpload()">
+								<button class="btn btn-success btn-sm" style="width:100%" type="button" onclick="MyUpload()">
 									<i class="fa fa-send" id="upload_status">Upload</i>
 								</button>
 							</div>
@@ -56,7 +56,7 @@
 					<svg style="width:30px; height:30px; fill:#00b383;">
 					  <use xlink:href="{% static 'dist/vendors/@coreui/icons/svg/free.svg' %}#cil-check-alt"></use>
 					</svg>
-					<p>Then click Confirm to submit.</p>
+					<p>File parse success.</p>
 				</div>
 			</div>
 			<!--Description-->
