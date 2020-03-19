@@ -14,7 +14,10 @@ urlpatterns = [
     url(r'^upload/result$', views.upload_result, name='upload_result'),
         # Download
     url(r'^download$', views.file_download, name='file_download'),
-    url(r'^download/8Dtemplate.xlsx$', views.download_8Dtemplate, name='download_8Dtemplate'),
+    url(r'^download/search$', views.file_search, name='file_search'),
+    url(r'^download/fileid(\d+)/$', views.download_8Dtemplate, name='download_8Dtemplate'),
+        # Create New Ticket
+    url(r'^add/ticket$', views.add_ticket, name='add_ticket'),
     # Dashboard
     url(r'^dbdashboard$', views.database_dashboard, name='database_dashboard'),
     # Search and Result

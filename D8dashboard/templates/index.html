@@ -2,8 +2,41 @@
 {% load static %}
 {% block content %}
   <div>
+    <!-- Start of Container -->
     <div class="column" style="width:83vw">
-      <!-- Start of Container -->
+
+      <!-- Start of Create New Ticket -->
+      <div class="row">
+          <div class="col-md-12">
+              <div class="card">
+                  <div class="card-header">
+                      <strong>Create New Ticket</strong>
+                  </div>
+                  <div class="card-body d-flex">
+                      <div class="col-md-3 d-flex">
+                          <input class="text-muted" type="text" id="ticket_id" style="border:1px solid #f2f2f2; width: 80%" readonly="true">
+                          <div style="min-width: 10px"></div>
+                          <button class="btn btn-sm btn-outline-dark" type="button" onclick="copyTicket()">
+                            <svg class="c-icon">
+                              <use xlink:href="{% static 'dist/vendors/@coreui/icons/svg/free.svg' %}#cil-clipboard"></use>
+                            </svg>
+                          </button>
+                      </div>
+                      <div class="col-md-6">
+                          <!--Add if necessary-->
+                      </div>
+                      <div class="col-md-3 d-flex justify-content-center">
+                          <button class="btn btn-sm btn-pill btn-success" type="button" style="width: 40%" onclick="CreateClick()">
+                            <svg class="c-icon">
+                              <use xlink:href="{% static 'dist/vendors/@coreui/icons/svg/free.svg' %}#cil-library-add"></use>
+                            </svg> Create
+                          </button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <!-- End -->
       <!-- Start of Search Box -->
       <div class="row">
         <div class="col-md-12 d-flex justify-content-center">
@@ -59,8 +92,9 @@
               </div>
             </div>
       </div>
-    </div>      
-      <!-- <h1>Welcome</h1> -->
+    </div>
+    <!-- End -->
+    <!-- Start of charts card -->
       <div class="card-columns cols-2 ">
 
         <!-- Bar Chart -->
@@ -161,5 +195,43 @@
         responsive: true
       }
     });
+  </script>
+  <script>
+    function CreateClick(){
+        console.log("enter func");
+         $.ajax({
+             url:"{% url 'add_ticket' %}",
+             type: "POST",
+             dataType: "json",
+             data:{},
+             success:function(data){
+                console.log(data);
+                document.getElementById("ticket_id").value = data.ticket;
+                //Show download button if exists
+                if(data.status == "200"){
+                    console.log("status 200 success");
+                }
+                else{
+                    console.log("failed");
+                }
+            },
+         });
+    }
+
+    //Copy to clipboard
+    function copyTicket() {
+        var ticket_id = document.getElementById("ticket_id").value.toString();
+        var ticket_text = document.createElement('input');
+        if(ticket_id.length == 0){
+            console.log("Empty ticket ID.");
+            return;
+        }
+        ticket_text.value = ticket_id;
+        document.body.appendChild(ticket_text);
+        ticket_text.select();
+        document.execCommand("Copy");
+        ticket_text.style.display = "none";
+        alert("Successfully copied to clipboard!");
+    }
   </script>
 {% endblock %}

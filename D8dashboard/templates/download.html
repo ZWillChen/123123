@@ -14,13 +14,27 @@
 			</div>
 		</div>
 		<div class="card-body">
-			<p class="text-muted">D8 template file</p>
+
+			<p class="text-muted">Please enter a file ID to find the download file</p>
+			<form method="post" id="form" enctype="multipart/form-data" action="" onsubmit="return false">
+				{% csrf_token %}
+				<div class="col-md-6 form-group d-flex justify-content-start">
+					<input name="file_id" id="file_id" type="number" style="min-width: 80%">
+						<div style="min-width: 10px"></div>
+					<input class="btn btn-secondary btn-sm" id="search" type="submit" value="Search" />
+				</div>
+				<div class="text-left">
+					<p id="file_check" style="color:red;"></p>
+				</div>
+			</form>
+
 			<div class="bd-example tooltip-demo">
-				<p class="muted">Some descriptions about template file:
-					<a href="#" data-toggle="tooltip" title="reminder content">for example, </a>
-					we can also add text on hover
-					<a href="#" data-toggle="tooltip" title="" data-original-title="Another tooltip">like this. </a>
-					If you have any good idea please tell me.
+				<p class="muted">First input your file id to check if the file exists:
+				<p>If the requested file exists, you can start download by clicking the download button.</p>
+					<p><a href="#" data-toggle="tooltip" title="reminder content">Otherwise, </a>
+						you should ask admin for your file id to download.</p>
+					<p><a href="#" data-toggle="tooltip" title="" data-original-title="Another tooltip">About webpage layout, </a>
+						Please tell me if you have any good idea.</p>
 				</p>
 				{% if Error %}
 					<p class="text-muted"> {{Error}} </p>
@@ -28,8 +42,9 @@
 			</div>
 		</div>
 		<div class="card-footer d-flex content-justify-right">
-			<a href="{% url 'download_8Dtemplate' %}" class="btn btn-secondary" type="button" data-toggle="tooltip" data-placement="top" title="Download reminder">
-				Download
+			<a href="#" onclick="startDownload()" id="download_btn" class="btn btn-secondary" type="button" data-toggle="tooltip" data-placement="top"
+			   title="Download reminder" hidden>
+			Download
 			</a>
 		</div>
 	</div>
@@ -38,7 +53,44 @@
 
 {% block script %}
 
-    <!--Tooltip for global use -->
+    <!--Tooltip for page use -->
     <script src="{% static 'dist/js/tooltips.js' %}"></script>
+	<!--Query -->
+	<script type="text/javascript">
+	$(document).ready(function(){
+		 $("#search").click(function(){
+		 	 $("#file_check").text("");
+		 	 console.log($("#file_id").val());
+			 $.ajax({
+				 url:"{% url 'file_search' %}",
+				 type: "POST",
+				 dataType: "json",
+				 data:{"file_id": $("#file_id").val(),
+				 },
+				 success:function(data){
+					console.log(data);
+					console.log(data.status);
+					console.log(data.message);
+					$("#file_check").text(data.message);
+					//Show download button if exists
+					if(data.status == "200"){
+						document.getElementById("download_btn").hidden = false;
+					}
+					else{
+						document.getElementById("download_btn").hidden = true;
+					}
+				},
+			 });
+		 });
+    });
+
+	function startDownload(){
+		debugger
+		console.log($("#file_id").val());
+
+		toPage = "/download/fileid" + $("#file_id").val();
+		window.location.replace(toPage);
+	}
+	</script>
 
 {% endblock%}
